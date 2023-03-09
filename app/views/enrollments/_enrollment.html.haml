@@ -1,0 +1,20 @@
+.card
+  .card-header
+    %h5.card-title
+      .text-warning.fa.fa-star
+      %b= enrollment.rating
+    %h6.card-subtitle.mb-2.text-muted
+      .fa.fa-user
+      = link_to enrollment.user.username, user_path(enrollment.user)
+  .card-body
+    %p.card-text
+    .fa.fa-comment
+    %b= enrollment.review
+  .card-footer.text-muted
+    %p.card-text
+    .fa.fa-clock
+    Reviewed 
+    #{time_ago_in_words(enrollment.updated_at)} ago
+    - if policy(enrollment).edit?
+      %p.card-text
+      = link_to 'Edit Review', edit_enrollment_path(enrollment)

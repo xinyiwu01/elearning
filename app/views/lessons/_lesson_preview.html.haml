@@ -1,0 +1,8 @@
+.fa.fa-lock
+%b
+  #{lesson.row_order_rank + 1}.
+= lesson.title
+.row
+- unless lesson.comments_count.zero?
+  .fa.fa-comment
+  = lesson.comments_count

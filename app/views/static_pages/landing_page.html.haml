@@ -1,0 +1,110 @@
+- content_for :title do
+  Corsego Online Courses
+
+.jumbotron.shadow.parallax
+  %h1.text-shadow
+    %b Good Ruby on Rails courses
+  .p-4
+  - if current_user
+    .p-3
+    = search_form_for @ransack_courses, as: :courses_search, url: courses_path do |f|
+      .input-group
+        = f.search_field :title_cont, class: 'form-control-lg', style: 'float: left; width: 200px; ', placeholder: 'Find a course', :autocomplete => :off
+        %span.input-group-append
+          %button.btn.btn-primary.btn-lg{:type => "submit"}
+            %span.fa.fa-search{"aria-hidden" => "true"}
+    .p-2
+  - else
+    %h3.text-shadow Join to access all the courses
+    .p-2
+    = link_to 'Register', new_user_registration_path, class: 'btn btn-custom-purple btn-lg'
+    = link_to 'Login', new_user_session_path, class: 'btn btn-custom-purple btn-lg'
+    .row.mt-1
+    = link_to user_google_oauth2_omniauth_authorize_path, method: :post, class: 'btn btn-danger btn-lg mr-1' do
+      Continue with
+      .fab.fa-google
+    .row.mt-1
+    = link_to user_github_omniauth_authorize_path, method: :post, class: 'btn btn-dark btn-lg mr-1' do
+      Continue with
+      .fab.fa-github
+    .row.mt-1
+    = link_to user_facebook_omniauth_authorize_path, method: :post, class: 'btn btn-primary btn-lg mr-1' do
+      Continue with
+      .fab.fa-facebook
+
+.card-group.shadow
+  .card
+    .card-body
+      %h1
+        .fa.fa-graduation-cap
+      = pluralize(Course.approved.published.count, 'online courses')
+      .row
+      %small Explore a variety of fresh topics
+  .card
+    .card-body
+      %h1
+        .fa.fa-chalkboard-teacher
+      = pluralize(Course.distinct.count(:user_id), 'expert instructors')
+      .row
+      %small Find the right instructor for you
+  .card
+    .card-body
+      %h1
+        .fa.fa-user-graduate
+      = pluralize(User.count, 'active learners')
+      .row
+      %small Join the knowledge sharing community
+  .card
+    .card-body
+      %h1
+        .fa.fa-infinity
+      Lifetime access
+      .row
+      %small Learn on your schedule
+
+%p
+
+%h2 
+  .fa.fa-tags
+  Top Categories
+- @popular_tags.each do |tag|
+  = link_to courses_path(courses_search: {course_tags_tag_id_eq: tag.id}) do
+    .mt-1.btn.btn-info
+      = tag.name
+      %span.badge.badge-light
+        = tag.course_tags_count
+%hr
+
+%h2
+  .fa.fa-chart-line
+  = link_to 'Popular courses', courses_path(courses_search: {s: 'enrollments_count desc'})
+.row
+  - @courses.each do |course|
+    = render 'courses/course_landscape', course: course
+    %p
+
+.card-group.shadow
+  .card
+    .card-body
+      %b
+        .fa.fa-clock
+        Go at your own pace
+      %br
+      %small
+        Enjoy lifetime access to courses whenever you want
+  .card
+    .card-body
+      %b
+        .far.fa-check-circle
+        Learn from industry experts
+      %br
+      %small
+        Select from top instructors around the world
+  .card
+    .card-body
+      %b
+        .far.fa-play-circle
+        Find video courses on almost any topic
+      %br
+      %small
+        Build your library for your career and personal growth
